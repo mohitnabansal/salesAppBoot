@@ -40,7 +40,8 @@ public class CustomerInfo {
 	@DBRef
 	private List<CustomerRequests> custRequest;
 		
-	
+	@DBRef
+	private ImageStore customerImg;
 	
 	public Long getVersion() {
 		return version;
@@ -54,7 +55,7 @@ public class CustomerInfo {
 	public void setPincode(String pincode) {
 		this.pincode = pincode;
 	}
-	private String customerImg;	
+		
 	
 	public String getId() {
 		return id;
@@ -118,10 +119,11 @@ public class CustomerInfo {
 	}
 	
 	
-	public String getCustomerImg() {
+
+	public ImageStore getCustomerImg() {
 		return customerImg;
 	}
-	public void setCustomerImg(String customerImg) {
+	public void setCustomerImg(ImageStore customerImg) {
 		this.customerImg = customerImg;
 	}
 	public Long getCustomerPhone() {

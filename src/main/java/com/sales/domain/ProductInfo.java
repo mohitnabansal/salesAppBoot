@@ -7,7 +7,7 @@ import java.util.Date;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.annotation.Version;
-import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="productinfo")
@@ -19,12 +19,13 @@ public class ProductInfo {
 
 	private String productName;
 
-	@Indexed(unique = true)	
+
 	private Long barCodeNumber;
 	
 	private String barcodeFormat;
 
-	private String prodImgPath;
+	@DBRef
+	private ImageStore prodImg;
 
 	private String productDescp;
 
@@ -100,12 +101,15 @@ public class ProductInfo {
 		this.barcodeFormat = barcodeFormat;
 	}
 
-	public String getProdImgPath() {
-		return prodImgPath;
+	
+
+
+	public ImageStore getProdImg() {
+		return prodImg;
 	}
 
-	public void setProdImgPath(String prodImgPath) {
-		this.prodImgPath = prodImgPath;
+	public void setProdImg(ImageStore prodImg) {
+		this.prodImg = prodImg;
 	}
 
 	public Double getProdDiscPrice() {

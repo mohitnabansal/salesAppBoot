@@ -2,6 +2,7 @@ package com.sales.domain;
 
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -11,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @TypeAlias("inventory")
 public class Inventory {
 
+	@Id	
 	private String id;
 	
 	@DBRef
@@ -19,7 +21,7 @@ public class Inventory {
 	@DBRef
 	private List<ProductInfo> versionHistory;
 
-	 @Version Long version;
+	 private Long version;
 
 	 
 	 

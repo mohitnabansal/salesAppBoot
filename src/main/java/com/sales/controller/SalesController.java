@@ -3,6 +3,7 @@ package com.sales.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +15,9 @@ import com.sales.domain.CustomerInfo;
 import com.sales.domain.Inventory;
 import com.sales.service.SalesService;
 
-@CrossOrigin(origins = "http://localhost:8008")
+//@CrossOrigin(origins = "http://192.168.1.4:1801")
+//@CrossOrigin(origins = "http://localhost:8100")
+@CrossOrigin(origins = "file://")
 @RestController
 @RequestMapping("/salesApi")
 public class SalesController {	
@@ -58,7 +61,7 @@ public Inventory getProductByBarCode(@RequestParam(value="barCode",required=true
 	return inv;
 }
 
-@RequestMapping(value="/saveInventory",method=RequestMethod.POST)
+@RequestMapping(value="/saveInventory",method=RequestMethod.POST,produces=MediaType.APPLICATION_JSON_VALUE)
 public Inventory saveInventory(@RequestBody Inventory inventory) {
 	Inventory inv = salesService.saveNewInventoryItem(inventory);
 	return inv;
