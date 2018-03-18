@@ -34,7 +34,7 @@ public class MongoConfiguration extends AbstractMongoConfiguration{
 	
 	 @Bean
 	    public MongoDbFactory mongoDbFactory() {
-	        MongoClient mongoClient = new MongoClient("localhost", 27017);
+	        MongoClient mongoClient = new MongoClient("mongodb://heroku_4cbsf2xz:4l509i1mbrlc78nu0fmp0b8q1c@ds117729.mlab.com:17729/heroku_4cbsf2xz");
 	        UserCredentials userCredentials = new UserCredentials("", "");
 	        return new SimpleMongoDbFactory(mongoClient, "salesApp");
 	    }
@@ -46,8 +46,9 @@ public class MongoConfiguration extends AbstractMongoConfiguration{
 	    }
 	@Override
 	public MongoClient mongoClient() {
+		
 		//MongoCredential userCredentials = new MongoCredential("", "");
-		return new MongoClient("127.0.0.1");
+		return new MongoClient("mongodb://heroku_4cbsf2xz:4l509i1mbrlc78nu0fmp0b8q1c@ds117729.mlab.com:17729/heroku_4cbsf2xz");
 	}
 
 	@Override
