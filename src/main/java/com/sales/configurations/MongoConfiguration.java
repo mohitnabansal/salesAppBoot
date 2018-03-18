@@ -1,24 +1,9 @@
 package com.sales.configurations;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import org.springframework.data.authentication.UserCredentials;
-import org.springframework.data.mongodb.MongoDbFactory;
-import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
-import org.springframework.data.mongodb.core.WriteConcernResolver;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+//@Configuration
 
-import com.mongodb.MongoClient;
-import com.mongodb.WriteConcern;
-
-@Configuration
-@EnableMongoRepositories(basePackages = "com.sales.repository")
 //@PropertySource("classpath:/com/${my.placeholder:default/path}/app.properties")
-public class MongoConfiguration extends AbstractMongoConfiguration{
+public class MongoConfiguration  {/*extends AbstractMongoConfiguration*//*
 
 
 	 @Autowired
@@ -57,4 +42,5 @@ public class MongoConfiguration extends AbstractMongoConfiguration{
 		return "salesDb";
 	}
 
+*/
 }
