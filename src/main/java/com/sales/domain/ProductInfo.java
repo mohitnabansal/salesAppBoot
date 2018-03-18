@@ -29,9 +29,9 @@ public class ProductInfo {
 
 	private String productDescp;
 
-	private Double CurrProdPrice;
+	private Double currProdPrice;
 	
-	private Double productVerion;
+	private Long productVerion;
 	
 	private Double prodDiscPrice;
 	
@@ -39,9 +39,21 @@ public class ProductInfo {
 	
 	private String productCategory;
 	
+	private Integer productQuantity;
+	
 	 @Version Long version;
  
 	 
+
+
+	public Integer getProductQuantity() {
+		return productQuantity;
+	}
+
+	public void setProductQuantity(Integer productQuantity) {
+		this.productQuantity = productQuantity;
+	}
+
 	public String getProductCategory() {
 		return productCategory;
 	}
@@ -128,20 +140,23 @@ public class ProductInfo {
 		this.productDescp = productDescp;
 	}
 
+	
+
 	public Double getCurrProdPrice() {
-		return CurrProdPrice;
+		return currProdPrice;
 	}
 
 	public void setCurrProdPrice(Double currProdPrice) {
-		CurrProdPrice = currProdPrice;
+		this.currProdPrice = currProdPrice;
 	}
 
-	public Double getProductVerion() {
+	public Long getProductVerion() {
 		return productVerion;
 	}
 
-	public void setProductVerion(Double productVerion) {
+	public void setProductVerion(Long productVerion) {
 		this.productVerion = productVerion;
 	}
-	
+
+
 }

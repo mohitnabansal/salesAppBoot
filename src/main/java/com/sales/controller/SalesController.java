@@ -1,5 +1,7 @@
 package com.sales.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sales.domain.CustomerInfo;
 import com.sales.domain.Inventory;
+import com.sales.domain.ProductInfo;
 import com.sales.service.SalesService;
 
 //@CrossOrigin(origins = "http://192.168.1.4:1801")
@@ -53,13 +56,36 @@ public CustomerInfo getCustomerByPhone(@RequestParam(value="phoneNo",required=tr
 }
 
 @RequestMapping(value="/getProductInfoByBarCode",method=RequestMethod.GET)
-public Inventory getProductByBarCode(@RequestParam(value="barCode",required=true) String barcodeNumber) {
-	Inventory inv = salesService.findInventoryByBarcode(Long.parseLong(barcodeNumber));
+	public Inventory getProductByBarCode(@RequestParam(value = "barCode", required = true) String barcodeNumber) {
+		ProductInfo product = salesService.findProductInfoByBarcode(Long.parseLong(barcodeNumber));
+		Inventory inv = null;
+		if (product != null && product.getId() != null) {
+			inv = salesService.findByProdInfoId(product.getId());
+			if (inv == null) {
+				inv = new Inventory();
+			}
+		} else {
+			inv = new Inventory();
+		}
+		return inv;
+	}
+
+@RequestMapping(value="/getProductListName",method=RequestMethod.GET)
+public List<ProductInfo> getProductListName(@RequestParam(value="productString" ,required=true)String productString){
+	return salesService.findProductInfoLikeProdName(productString);
+}
+
+
+
+@RequestMapping(value="/getProductInfoByNameId",method=RequestMethod.GET)
+public Inventory getProductInfoByNameId(@RequestParam(value="productNameId",required=true) String productNameId) {
+	Inventory inv = salesService.findByProdInfoId(productNameId);
 	if(inv==null) {
 		inv = new Inventory();
 	}
 	return inv;
 }
+
 
 @RequestMapping(value="/saveInventory",method=RequestMethod.POST,produces=MediaType.APPLICATION_JSON_VALUE)
 public Inventory saveInventory(@RequestBody Inventory inventory) {

@@ -1,6 +1,9 @@
 package com.sales.service;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,10 +67,46 @@ public class SalesService {
 		}
 	}
 
+	public ProductInfo findProductInfoByBarcode(Long barcodeNumber){
+		ProductInfo prodFromDb = new ProductInfo();
+		try {
+			prodFromDb = prodInfoRepo.findByBarCodeNumber(barcodeNumber);
+		}catch(Exception e) {
+			// TODO Auto-generated catch block
+						e.printStackTrace();
+		}
+		return prodFromDb;
+	}
+	
 	public Inventory findInventoryByBarcode(Long barCodetext) {
 		Inventory fromDb = null;
 		try {
 			fromDb = inventRepo.findByProdInfoBarCodeNumber(barCodetext);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return fromDb;
+	}
+	
+	public List<ProductInfo> findProductInfoLikeProdName(String prodName){
+		
+		List<ProductInfo> inventLis= new ArrayList<ProductInfo>();
+		try {
+		inventLis = prodInfoRepo.findByproductNameLike(prodName);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			
+		}
+		return inventLis;
+	}
+	
+	
+	public Inventory findByProdInfoId(String prodName) {
+		Inventory fromDb = null;
+		try {
+			fromDb = inventRepo.findByProdInfoId(prodName);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

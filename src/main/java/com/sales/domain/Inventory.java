@@ -21,7 +21,8 @@ public class Inventory {
 	@DBRef
 	private List<ProductInfo> versionHistory;
 
-	 private Long version;
+	
+	private Long version;
 
 	 
 	 
