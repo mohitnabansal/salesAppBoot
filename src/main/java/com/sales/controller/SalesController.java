@@ -19,8 +19,8 @@ import com.sales.domain.ProductInfo;
 import com.sales.service.SalesService;
 
 //@CrossOrigin(origins = "http://192.168.1.4:1801")
-//@CrossOrigin(origins = "http://localhost:8100")
-@CrossOrigin(origins = "file://")
+@CrossOrigin(origins = "http://localhost:8100")
+//@CrossOrigin(origins = "file://")
 @RestController
 @RequestMapping("/salesApi")
 public class SalesController {	
