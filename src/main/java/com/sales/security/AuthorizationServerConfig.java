@@ -7,21 +7,33 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+
+import com.sales.security.service.UserService;
 
 
 @Configuration
 @EnableAuthorizationServer
+//@Order(value=100)
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter{ 
 	
+	
+
+	 @Value("${security.signing-key}")
+	   private String signingKey;
+	 
 	@Value("${security.jwt.client-id}")
 	   private String clientId;
 
@@ -49,7 +61,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	   @Autowired
 	   private JwtAccessTokenConverter accessTokenConverter; 
 	   
-	 
+	   @Autowired
+	    private UserService userDetailsService;
+		
+		
+
 	    @Autowired
 	    @Qualifier("authenticationManagerBean")
 	    private AuthenticationManager authenticationManager;
@@ -66,20 +82,44 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
             .inMemory()
             .withClient(clientId)
             .secret(encoder().encode(clientSecret))
-            .authorizedGrantTypes("authorization_code","refresh_token","password"/*,"implicit"*/).authorities(grantTypes)
-            .scopes(scopeRead, scopeWrite)
-            .resourceIds(resourceIds);
+            .authorizedGrantTypes("refresh_token","password")
+            .authorities("ROLE_USER")
+            .scopes(scopeRead, scopeWrite).accessTokenValiditySeconds(50)
+            .resourceIds(resourceIds).refreshTokenValiditySeconds(500000);
 	        
 	    }
 	 
 	    @Override
 	    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 	       TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
-	       enhancerChain.setTokenEnhancers(Arrays.asList(accessTokenConverter));
-	       endpoints.tokenStore(tokenStore)
-	               .accessTokenConverter(accessTokenConverter)
+	       enhancerChain.setTokenEnhancers(Arrays.asList(tokenEnhancer(),accessTokenConverter));
+	       endpoints.tokenStore(tokenStore())
+	               .accessTokenConverter(accessTokenConverter())
 	               .tokenEnhancer(enhancerChain)
-	               .authenticationManager(authenticationManager);
+	               .authenticationManager(authenticationManager).userDetailsService(userDetailsService);
 	    }
-
+	    @Bean
+	    public TokenEnhancer tokenEnhancer() {
+	        return new CustomTokenEnhancer();
+	    }
+	    @Bean
+	    public TokenStore tokenStore() {
+	        return new JwtTokenStore(accessTokenConverter());
+	    }
+	 
+	    @Bean
+	    public JwtAccessTokenConverter accessTokenConverter() {
+	        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+	        converter.setSigningKey(signingKey);
+	        return converter;
+	    }
+	 
+	    @Bean
+	    @Primary
+	    public DefaultTokenServices tokenServices() {
+	        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+	        defaultTokenServices.setTokenStore(tokenStore());
+	        defaultTokenServices.setSupportRefreshToken(true);
+	        return defaultTokenServices;
+	    }
 }

@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -30,10 +31,10 @@ import com.sales.security.service.UserService;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+//@Order(value=101)
 public class WebSecurityConfig  extends WebSecurityConfigurerAdapter{
 	
-	 @Value("${security.signing-key}")
-	   private String signingKey;
+	
 
 	   @Value("${security.encoding-strength}")
 	   private Integer encodingStrength;
@@ -42,8 +43,6 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter{
 	   private String securityRealm;
 
 	
-	@Autowired
-    private UserService userDetailsService;
 	
 	 @Override
 	    @Bean
@@ -53,12 +52,6 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter{
 
 	
 	 
-	 @Override
-	    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-	        auth
-	        	.userDetailsService(userDetailsService)
-	               .passwordEncoder(encoder());
-	    }
 	 @Override
 	   protected void configure(HttpSecurity http) throws Exception {
 	      http
@@ -70,6 +63,7 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter{
 	              .and()
 	              .csrf()
 	              .disable();
+	    
 
 	   }
 	 
@@ -80,26 +74,7 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter{
 	        return new BCryptPasswordEncoder();
 	    }
 	    
-	    @Bean
-	    public JwtAccessTokenConverter accessTokenConverter() {
-	       JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-	       converter.setSigningKey(signingKey);
-	       return converter;
-	    }
-
-	    @Bean
-	    public TokenStore tokenStore() {
-	       return new JwtTokenStore(accessTokenConverter());
-	    }
-
-	    @Bean
-	    @Primary //Making this primary to avoid any accidental duplication with another token service instance of the same name
-	    public DefaultTokenServices tokenServices() {
-	       DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-	       defaultTokenServices.setTokenStore(tokenStore());
-	       defaultTokenServices.setSupportRefreshToken(true);
-	       return defaultTokenServices;
-	    }
+	   
 	    
 	    @Bean
 	    public FilterRegistrationBean simpleCorsFilter() {
