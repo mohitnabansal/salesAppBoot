@@ -84,8 +84,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
             .secret(encoder().encode(clientSecret))
             .authorizedGrantTypes("refresh_token","password")
             .authorities("ROLE_USER")
-            .scopes(scopeRead, scopeWrite).accessTokenValiditySeconds(50)
-            .resourceIds(resourceIds).refreshTokenValiditySeconds(500000);
+            .scopes(scopeRead, scopeWrite).accessTokenValiditySeconds(500)
+            .resourceIds(resourceIds).refreshTokenValiditySeconds(Integer.MAX_VALUE);
 	        
 	    }
 	 
@@ -120,6 +120,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
 	        defaultTokenServices.setTokenStore(tokenStore());
 	        defaultTokenServices.setSupportRefreshToken(true);
+	        
 	        return defaultTokenServices;
 	    }
 }
